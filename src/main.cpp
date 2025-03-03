@@ -4,7 +4,7 @@
 std::string check_invalid(std::string& input) {
 
     std::string err ;
-    err =  input +" "+":command not found" ;
+    err =  input +": "+"command not found" ;
     return err;
 
 }
