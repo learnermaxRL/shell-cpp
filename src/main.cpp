@@ -1,6 +1,13 @@
 #include <iostream>
 
 
+bool check_exit(std::string& inp){
+  if (inp == "exit"){
+    return true;
+  }
+  return false;
+}
+
 std::string check_invalid(std::string& input) {
 
     std::string err ;
@@ -23,6 +30,11 @@ int main() {
 
     std::getline(std::cin, input);
 
+    if (check_exit(input))
+    {
+      exit(0);
+    }
+     
     std::string err = check_invalid(input);
 
     if (!err.empty())
@@ -30,6 +42,6 @@ int main() {
         std::cout << err ;
         std::cout << std::endl;
       }
-
+    
   }
 }
