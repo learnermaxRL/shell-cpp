@@ -1,4 +1,20 @@
 #include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+
+
+bool check_and_execute_command (std::string inp) {
+
+   
+    if (inp.find("echo") != std::string::npos) {
+      std::cout << inp.substr(5)<<std ::endl ;
+      return true ;
+    }
+    return false ; 
+}
+
+
 
 
 bool check_exit(std::string& inp){
@@ -34,13 +50,18 @@ int main() {
     {
       exit(0);
     }
+    else if (check_and_execute_command(input)) {
+        continue;
+    }
      
-    std::string err = check_invalid(input);
+    else {
+      std::string err = check_invalid(input);
 
-    if (!err.empty())
-      {
-        std::cout << err ;
-        std::cout << std::endl;
+      if (!err.empty())
+        {
+          std::cout << err ;
+          std::cout << std::endl;
+        }
       }
     
   }
