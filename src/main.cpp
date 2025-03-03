@@ -2,7 +2,7 @@
 
 
 bool check_exit(std::string& inp){
-  if (inp == "exit"){
+  if (inp.substr(0,4) == "exit"){
     return true;
   }
   return false;
