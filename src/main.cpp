@@ -41,7 +41,7 @@ int main() {
   while (true)
   // Uncomment this block to pass the first stage
   {  
-    std::cout << "$ ";
+    std::cout << "$ "; //aa
     std::string input;
 
     std::getline(std::cin, input);
