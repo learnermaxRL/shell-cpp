@@ -24,7 +24,8 @@ std::string check_invalid(std::string& input) {
 
 std::vector<std::string> commandslist = {
   "echo",
-  "type"
+  "type",
+  "exit"
 };
 
 
