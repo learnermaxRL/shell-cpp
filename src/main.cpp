@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <cstdlib>
 #include "utils.h"
 
 
@@ -29,19 +30,31 @@ std::vector<std::string> commandslist = {
 };
 
 
-bool check_and_execute_command (std::string inp) {
+bool check_and_execute_command (std::string inp,char* path) {
 
     inp = trim_whitespaces(inp);
    
     if (inp.find("type") != std::string::npos  ) {
+      std::string cmd = inp.substr(inp.find("type")+5);
       
-      if (std::find(commandslist.begin(),commandslist.end(), inp.substr(inp.find("type")+5) ) != commandslist.end())
+      // check if its a builtin
+      if (std::find(commandslist.begin(),commandslist.end(), cmd ) != commandslist.end())
         {
-          std::cout << inp.substr(inp.find("type")+5) << " is a shell builtin"<<std::endl;
+          std::cout << cmd << " is a shell builtin"<<std::endl;
         }
 
+      // check if its in path 
+      else if (path != nullptr){
+        std::string pth = findExecutable(cmd ,path);
+        if (findExecutable(cmd ,path) != ""){
+          std::cout << cmd << " is " << pth << std::endl;
+        }
+        else{
+          std::cout << cmd << ": not found" <<std::endl;
+        }
+      }
+
       else {
-          std::string cmd = inp.substr(inp.find("type")+5);
           std::cout << cmd << ": not found" <<std::endl;
       }
       return true;
@@ -65,10 +78,13 @@ bool check_and_execute_command (std::string inp) {
 
 
 
-int main() {
+int main(int argc, char *argv[]) {
   // Flush after every std::cout / std:cerr
   std::cout << std::unitbuf;
   std::cerr << std::unitbuf;
+
+
+  char * path_var = std::getenv("PATH");
 
   while (true)
   // Uncomment this block to pass the first stage
@@ -82,7 +98,7 @@ int main() {
     {
       exit(0);
     }
-    else if (check_and_execute_command(input)) {
+    else if (check_and_execute_command(input , path_var)) {
         continue;
     }
      

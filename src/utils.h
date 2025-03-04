@@ -4,5 +4,6 @@
 #include <string>
 
 std::string trim_whitespaces(const std::string& str);
+std::string findExecutable(const std::string& name, const std::string& pathEnv);
 
 #endif // UTILS_Haa

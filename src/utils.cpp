@@ -1,6 +1,16 @@
 #include <string>
 #include <algorithm>
+#include <filesystem>
+#include <system_error>
 #include "utils.h"
+#include <iostream>
+#include <string>
+#include <vector>
+#include <filesystem>
+#include <sstream>
+
+namespace fs = std::filesystem;
+
 
 std::string trim_whitespaces(const std::string& str) {
     // Find first non-whitespace character
@@ -21,4 +31,43 @@ std::string trim_whitespaces(const std::string& str) {
     
     // Return trimmed string
     return std::string(start, end);
+}
+
+/////////////////////////////////////////////////////
+
+
+
+std::string findExecutable(const std::string& name, const std::string& pathEnv) {
+    // If name contains a slash, directly check if it's executable
+    if (name.find('/') != std::string::npos) {
+        fs::path execPath(name);
+        if (fs::exists(execPath) && fs::is_regular_file(execPath) && 
+            (fs::status(execPath).permissions() & fs::perms::owner_exec) != fs::perms::none) {
+            return fs::absolute(execPath).string();
+        }
+        return "";
+    }
+    
+    // Split PATH by colon
+    std::stringstream ss(pathEnv);
+    std::string dir;
+    
+    while (std::getline(ss, dir, ':')) {
+        if (dir.empty()) dir = "."; // Empty component means current directory
+        
+        fs::path execPath = fs::path(dir) / name;
+        
+        try {
+            // Check if file exists, is regular, and executable
+            if (fs::exists(execPath) && fs::is_regular_file(execPath) && 
+                (fs::status(execPath).permissions() & fs::perms::owner_exec) != fs::perms::none) {
+                return fs::absolute(execPath).string();
+            }
+        } catch (const fs::filesystem_error&) {
+            // Skip inaccessible directories
+            continue;
+        }
+    }
+    
+    return ""; // Not found
 }
