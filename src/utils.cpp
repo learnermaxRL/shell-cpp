@@ -1,6 +1,6 @@
 #include <string>
 #include <algorithm>
-#include "util.h"
+#include "utils.h"
 
 std::string trim_whitespaces(const std::string& str) {
     // Find first non-whitespace character
