@@ -32,8 +32,22 @@ std::string trim_whitespaces(const std::string& str) {
     // Return trimmed string
     return std::string(start, end);
 }
+///////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////
+std::vector<std::string> splitCMD(std::string inp)
+{
+    std::stringstream ss(inp);
+    std::string tok;
+    std::vector<std::string> splits;
+    
+    while (std::getline(ss, tok, ' ')) {
+        if (!tok.empty()) {
+            splits.push_back(tok);
+        }
+    }
+    
+    return splits;
+}
 
 
 
@@ -63,7 +77,8 @@ std::string findExecutable(const std::string& name, const std::string& pathEnv) 
                 (fs::status(execPath).permissions() & fs::perms::owner_exec) != fs::perms::none) {
                 return fs::absolute(execPath).string();
             }
-        } catch (const fs::filesystem_error&) {
+        } 
+        catch (const fs::filesystem_error&) {
             // Skip inaccessible directories
             continue;
         }
