@@ -36,14 +36,52 @@ std::string trim_whitespaces(const std::string& str) {
 
 std::vector<std::string> splitCMD(std::string inp)
 {
-    std::stringstream ss(inp);
-    std::string tok;
     std::vector<std::string> splits;
+    std::string current_token;
+    bool in_quotes = false;
+    char quote_char = '\0';
     
-    while (std::getline(ss, tok, ' ')) {
-        if (!tok.empty()) {
-            splits.push_back(tok);
+    for (size_t i = 0; i < inp.length(); i++) {
+        char c = inp[i];
+        
+        // Handle quotes
+        if ((c == '"' || c == '\'') && (i == 0 || inp[i-1] != '\\')) {
+            if (!in_quotes) {
+                // Starting a quoted section
+                in_quotes = true;
+                quote_char = c;
+            } else if (c == quote_char) {
+                // Ending a quoted section
+                in_quotes = false;
+                quote_char = '\0';
+            } else {
+                // Different quote character inside quotes - treat as literal
+                current_token += c;
+            }
         }
+        // Handle spaces
+        else if (c == ' ' && !in_quotes) {
+            // Space outside quotes - token separator
+            if (!current_token.empty()) {
+                splits.push_back(current_token);
+                current_token.clear();
+            }
+        }
+        // All other characters
+        else {
+            current_token += c;
+        }
+    }
+    
+    // Add the last token if there is one
+    if (!current_token.empty()) {
+        splits.push_back(current_token);
+    }
+    
+    // Warning: unclosed quotes
+    if (in_quotes) {
+        // In a real shell, you might want to handle this differently
+        // Perhaps by asking for more input or raising an error
     }
     
     return splits;
