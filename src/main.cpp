@@ -5,8 +5,10 @@
 #include <algorithm>
 #include <cstdlib>
 #include <unistd.h>
+#include <cstring>
 #include <sys/wait.h>
 #include <limits.h>
+#include <cerrno>
 #include "utils.h"
 
 
@@ -42,7 +44,7 @@ void handleCDCommand(std::string& inp){
     
     if (chdir(aa) == -1) {
         // Print appropriate error message based on errno
-        std::cerr << "cd: " << dir << " : " << strerror(errno) << std::endl;
+        std::cerr << "cd: " << dir << ": " << std::strerror(errno) << std::endl;
     }
 
    
