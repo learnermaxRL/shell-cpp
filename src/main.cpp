@@ -40,6 +40,14 @@ void handleCDCommand(std::string& inp){
     if (inp.length() > 2) {
         dir = trim_whitespaces(inp.substr(3)); // Skip "cd " and trim
     }
+
+    if (dir == "~"){
+      char* home = getenv("HOME");
+      if (home != nullptr){
+        dir = std::string(home);
+      }
+    }
+
     const char* aa = dir.c_str();
     
     if (chdir(aa) == -1) {
