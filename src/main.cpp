@@ -6,18 +6,29 @@
 #include <cstdlib>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <limits.h>
 #include "utils.h"
+
 
 // List of built-in commands
 const std::vector<std::string> BUILTIN_COMMANDS = {
     "echo",
     "type",
-    "exit"
+    "exit" , 
+    "pwd"
 };
 
 // Check if command is "exit"
 bool isExitCommand(const std::string& input) {
     return input.substr(0, 4) == "exit";
+}
+
+void handlePWDCommand(){
+   char cwd[PATH_MAX];
+   if (getcwd(cwd, sizeof(cwd)) != nullptr) {  // Calls getcwd() and checks if it succeeded
+        std::cout << cwd << std::endl;  // Prints the path if successful
+    }
+    return;
 }
 
 // Handle "echo" command
@@ -98,6 +109,11 @@ bool processCommand(const std::string& input, char* pathVar) {
     if (trimmedInput.find("type") == 0) {
         handleTypeCommand(trimmedInput, pathVar);
         return true;
+    }
+
+    if (trimmedInput.find("pwd") == 0){
+       handlePWDCommand();
+       return true;
     }
     
     // Try to execute as external command
