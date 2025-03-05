@@ -49,6 +49,21 @@ std::vector<std::string> splitCMD(std::string inp)
     return splits;
 }
 
+///////////////////////////////////////////////////////////////
+
+std::string get_trimmed_cmd(std::string inp)
+{
+    std::vector<std::string> parts = splitCMD(inp);
+    std::string concatenated_cmd = "";
+    for (auto p:parts){
+        concatenated_cmd = " "+concatenated_cmd;
+    }
+    return concatenated_cmd;
+}
+
+
+///////////////////////////////////////////////////////////////
+
 
 
 std::string findExecutable(const std::string& name, const std::string& pathEnv) {

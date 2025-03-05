@@ -15,7 +15,8 @@ const std::vector<std::string> BUILTIN_COMMANDS = {
     "echo",
     "type",
     "exit" , 
-    "pwd"
+    "pwd",
+    "cd"
 };
 
 // Check if command is "exit"
@@ -29,6 +30,22 @@ void handlePWDCommand(){
         std::cout << cwd << std::endl;  // Prints the path if successful
     }
     return;
+}
+
+void handleCDCommand(std::string& inp){
+
+    std::string dir;
+    if (inp.length() > 2) {
+        dir = trim_whitespaces(inp.substr(3)); // Skip "cd " and trim
+    }
+    const char* aa = dir.c_str();
+    
+    if (chdir(aa) == -1) {
+        // Print appropriate error message based on errno
+        std::cerr << "cd: " << dir << " : " << strerror(errno) << std::endl;
+    }
+
+   
 }
 
 // Handle "echo" command
@@ -114,6 +131,11 @@ bool processCommand(const std::string& input, char* pathVar) {
     if (trimmedInput.find("pwd") == 0){
        handlePWDCommand();
        return true;
+    }
+
+    if (trimmedInput.find("cd") == 0){
+      handleCDCommand(trimmedInput);
+      return true;
     }
     
     // Try to execute as external command
