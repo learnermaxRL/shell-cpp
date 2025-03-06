@@ -65,7 +65,33 @@ void handleEchoCommand(const std::string& input) {
         std::cout << std::endl;
         return;
     }
-    std::cout << input.substr(5) << std::endl;
+    
+    std::string args = input.substr(5);
+    std::string result;
+    bool in_quotes = false;
+    char quote_char = '\0';
+    
+    for (size_t i = 0; i < args.length(); i++) {
+        char c = args[i];
+        
+        if ((c == '"' || c == '\'') && (i == 0 || args[i-1] != '\\')) {
+            // Toggle quote state but don't add to result
+            if (!in_quotes) {
+                in_quotes = true;
+                quote_char = c;
+            } else if (c == quote_char) {
+                in_quotes = false;
+                quote_char = '\0';
+            } else {
+                // Different quote type inside quotes
+                result += c;
+            }
+        } else {
+            result += c;
+        }
+    }
+    
+    std::cout << result << std::endl;
 }
 
 
