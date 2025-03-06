@@ -67,31 +67,37 @@ void handleEchoCommand(const std::string& input) {
     }
     
     std::string args = input.substr(5);
-    std::string result;
+    std::vector<std::string> splits = splitCMD(args);
+
+    std::string results="";
     bool in_quotes = false;
     char quote_char = '\0';
     
-    for (size_t i = 0; i < args.length(); i++) {
-        char c = args[i];
-        
-        if ((c == '"' || c == '\'') && (i == 0 || args[i-1] != '\\')) {
-            // Toggle quote state but don't add to result
-            if (!in_quotes) {
-                in_quotes = true;
-                quote_char = c;
-            } else if (c == quote_char) {
-                in_quotes = false;
-                quote_char = '\0';
-            } else {
-                // Different quote type inside quotes
-                result += c;
-            }
-        } else {
-            result += c;
-        }
+    for (size_t k = 0 ; k < splits.size() ; k++ ){
+      std::string sp = splits[k];
+      std::string result;
+      for (size_t i = 0; i < sp.length(); i++) {
+          char c = sp[i];
+          
+          if ((c == '"' || c == '\'') && (i == 0 || args[i-1] != '\\')) {
+              // Toggle quote state but don't add to result
+              if (!in_quotes) {
+                  in_quotes = true;
+                  quote_char = c;
+              } else if (c == quote_char) {
+                  in_quotes = false;
+                  quote_char = '\0';
+              } else {
+                  // Different quote type inside quotes
+                  result += c;
+              }
+          } else {
+              result += c;
+          }
+      }
+      results = results+" "+ result;
     }
-    
-    std::cout << result << std::endl;
+    std::cout << results << std::endl;
 }
 
 
