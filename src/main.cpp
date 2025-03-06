@@ -95,7 +95,11 @@ void handleEchoCommand(const std::string& input) {
               result += c;
           }
       }
-      results = results+" "+ result;
+      if (results != "")
+      {results = results+" "+ result;}
+      else{
+        results=result;
+      }
     }
     std::cout << results << std::endl;
 }
