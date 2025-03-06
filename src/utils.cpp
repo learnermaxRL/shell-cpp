@@ -49,6 +49,9 @@ std::vector<std::string> splitCMD(std::string inp)
         
         // Handle quotes
         if ((c == '"' || c == '\'') && (i == 0 || inp[i-1] != '\\')) {
+            // Add the quote character to the token
+            current_token += c;
+            
             if (!in_quotes) {
                 // Starting a quoted section
                 in_quotes = true;
@@ -57,9 +60,6 @@ std::vector<std::string> splitCMD(std::string inp)
                 // Ending a quoted section
                 in_quotes = false;
                 quote_char = '\0';
-            } else {
-                // Different quote character inside quotes - treat as literal
-                current_token += c;
             }
         }
         // Handle spaces
@@ -79,12 +79,6 @@ std::vector<std::string> splitCMD(std::string inp)
     // Add the last token if there is one
     if (!current_token.empty()) {
         splits.push_back(current_token);
-    }
-    
-    // Warning: unclosed quotes
-    if (in_quotes) {
-        // In a real shell, you might want to handle this differently
-        // Perhaps by asking for more input or raising an error
     }
     
     return splits;
